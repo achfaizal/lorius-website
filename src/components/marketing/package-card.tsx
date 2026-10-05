@@ -6,8 +6,9 @@ import { Check, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Package } from "@/data/packages";
 import { trackEvent } from "@/lib/analytics";
-import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
+
+import { PackagePrice } from "./package-price";
 
 interface PackageCardProps {
   pkg: Package;
@@ -32,12 +33,7 @@ export function PackageCard({ pkg }: PackageCardProps) {
 
       <h3 className="text-h3 text-brand">{pkg.name}</h3>
 
-      <div className="flex items-baseline gap-1">
-        <span className="text-h2 font-semibold text-brand">
-          {formatRupiah(pkg.price)}
-        </span>
-        <span className="text-caption text-brand-gray">/ paket</span>
-      </div>
+      <PackagePrice pkg={pkg} />
 
       <ul className="flex flex-col gap-3">
         <li className="flex items-center gap-2.5">
@@ -57,9 +53,6 @@ export function PackageCard({ pkg }: PackageCardProps) {
         ))}
       </ul>
 
-      {pkg.note ? (
-        <p className="text-caption text-brand-gray italic">{pkg.note}</p>
-      ) : null}
 
       <Button
         asChild

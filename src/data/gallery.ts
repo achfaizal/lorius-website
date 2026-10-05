@@ -2,15 +2,15 @@ export type GalleryCategory =
   | "engagement"
   | "prewedding"
   | "wedding"
-  | "graduation"
-  | "event";
+  | "graduation";
 
+// Same order as the package tabs and booking chips (Prewedding, Wedding,
+// Graduation first) — this object's key order drives the filter chips.
 export const GALLERY_CATEGORY_LABEL: Record<GalleryCategory, string> = {
-  engagement: "Engagement",
   prewedding: "Prewedding",
   wedding: "Wedding",
   graduation: "Graduation",
-  event: "Event",
+  engagement: "Engagement",
 };
 
 export interface GalleryItem {
@@ -36,22 +36,6 @@ function instagramImage(code: string) {
 
 /** Selected portfolio for the homepage gallery section — blueprint §12. */
 export const GALLERY_ITEMS: GalleryItem[] = [
-  {
-    id: "eng-01",
-    category: "engagement",
-    title: "Janji yang Dijaga",
-    imageUrl: "/photos/service-engagement.jpg",
-    imageAlt: "Pasangan berbagi momen hangat saat engagement",
-    ratio: "portrait",
-  },
-  {
-    id: "eng-02",
-    category: "engagement",
-    title: "Dua Hati, Satu Arah",
-    imageUrl: "/photos/gallery-engagement-02.jpg",
-    imageAlt: "Pasangan engagement tersenyum bersama",
-    ratio: "square",
-  },
   {
     id: "pre-01",
     category: "prewedding",
@@ -133,19 +117,19 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     ratio: "portrait",
   },
   {
-    id: "evt-01",
-    category: "event",
-    title: "Tawa yang Terekam",
-    imageUrl: "/photos/gallery-event-01.jpg",
-    imageAlt: "Confetti beterbangan di tengah perayaan",
-    ratio: "square",
+    id: "eng-01",
+    category: "engagement",
+    title: "Janji yang Dijaga",
+    imageUrl: "/photos/service-engagement.jpg",
+    imageAlt: "Pasangan berbagi momen hangat saat engagement",
+    ratio: "portrait",
   },
   {
-    id: "evt-02",
-    category: "event",
-    title: "Momen Bersama Bermakna",
-    imageUrl: "/photos/gallery-event-02.jpg",
-    imageAlt: "Suasana meriah sebuah acara",
-    ratio: "tall",
+    id: "eng-02",
+    category: "engagement",
+    title: "Dua Hati, Satu Arah",
+    imageUrl: "/photos/gallery-engagement-02.jpg",
+    imageAlt: "Pasangan engagement tersenyum bersama",
+    ratio: "square",
   },
 ];

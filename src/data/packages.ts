@@ -1,192 +1,168 @@
 /**
- * Real packages from docs/PRICE-LIST-LORIUS-PHOTOGRAPHY.pdf — replaces the
- * earlier placeholder Basic/Signature/Premium set from TASK 06. Every
- * service now has its own package lineup (1-3 tiers depending on the
- * service, matching the PDF exactly) instead of one generic set shared by
- * everyone.
- *
- * The PDF's package contents don't cleanly fit a single rigid schema
- * (duration is only ever given for Graduation; videographer/crew only
- * apply to some tiers; photo counts are phrased differently per package —
- * "60 Foto" in an album vs. "36 Foto Editing" vs. "Bonus 20 Foto
- * Editing") — so everything except price and photographer count lives in
- * `features` as plain bullets, mirroring the PDF's own bullet lists
- * rather than forcing mismatched structured fields.
+ * Packages from the 2026 promo price-list posters (4 services x Silver /
+ * Gold / Platinum; the source images are kept in `docs/price-list-2026/`).
+ * Every package shows its normal price struck through next to the current
+ * discounted price. Wording is normalized to the site's usual phrasing
+ * ("Foto Editing", "1 Videografer", "1 Crew (Pengatur Gaya)"); every package
+ * includes 1 photographer, so that's a number field and the rest of each
+ * poster's bullet list lives in `features`.
  */
 export interface Package {
   id: string;
   serviceId: string;
   name: string;
   slug: string;
+  /** Current (discounted) price in rupiah — what the customer pays. */
   price: number;
+  /** Normal price in rupiah, shown struck through. Always above `price`. */
+  originalPrice: number;
   photographerCount: number;
   isPopular: boolean;
   features: string[];
-  /** The PDF's "*Jika ada request lain bisa didiskusikan bersama kami" note, where present. */
-  note?: string;
 }
 
-const CUSTOM_REQUEST_NOTE = "Ada kebutuhan lain? Bisa didiskusikan bersama kami.";
-
 export const PACKAGES: Package[] = [
-  // --- Wedding ---
+  {
+    id: "graduation-silver",
+    serviceId: "graduation",
+    name: "Silver",
+    slug: "graduation-silver",
+    originalPrice: 370_000,
+    price: 299_000,
+    photographerCount: 1,
+    isPopular: false,
+    features: ["1 Person", "All File Backup", "50 Foto Editing", "1 Jam Kerja"],
+  },
+  {
+    id: "graduation-gold",
+    serviceId: "graduation",
+    name: "Gold",
+    slug: "graduation-gold",
+    originalPrice: 500_000,
+    price: 350_000,
+    photographerCount: 1,
+    isPopular: true,
+    features: ["Family / Couple", "File Backup", "Semua Foto Editing", "50 Foto Editing", "1 Jam Kerja"],
+  },
+  {
+    id: "graduation-platinum",
+    serviceId: "graduation",
+    name: "Platinum",
+    slug: "graduation-platinum",
+    originalPrice: 1_500_000,
+    price: 1_200_000,
+    photographerCount: 1,
+    isPopular: false,
+    features: ["Video Cinematic", "All File Backup", "Semua Foto Editing", "1 Videografer", "1 Crew (Pengatur Gaya)", "3 Jam Kerja"],
+  },
+  {
+    id: "engagement-silver",
+    serviceId: "engagement",
+    name: "Silver",
+    slug: "engagement-silver",
+    originalPrice: 1_200_000,
+    price: 1_000_000,
+    photographerCount: 1,
+    isPopular: false,
+    features: ["File Backup", "1 Crew (Pengatur Gaya)", "50+ Foto Editing"],
+  },
+  {
+    id: "engagement-gold",
+    serviceId: "engagement",
+    name: "Gold",
+    slug: "engagement-gold",
+    originalPrice: 1_800_000,
+    price: 1_499_000,
+    photographerCount: 1,
+    isPopular: true,
+    features: ["Video Cinematic", "File Backup", "1 Videografer", "1 Crew (Pengatur Gaya)", "50+ Foto Editing"],
+  },
+  {
+    id: "engagement-platinum",
+    serviceId: "engagement",
+    name: "Platinum",
+    slug: "engagement-platinum",
+    originalPrice: 2_300_000,
+    price: 2_000_000,
+    photographerCount: 1,
+    isPopular: false,
+    features: ["Video Cinematic", "1 Cetak 12R", "File Backup", "Semua Foto Editing", "1 Videografer", "1 Crew (Pengatur Gaya)"],
+  },
   {
     id: "wedding-silver",
     serviceId: "wedding",
     name: "Silver",
     slug: "wedding-silver",
-    price: 1_500_000,
-    photographerCount: 2,
+    originalPrice: 1_500_000,
+    price: 1_299_000,
+    photographerCount: 1,
     isPopular: false,
-    features: [
-      "1 Album Photobook Standar 60 Foto + File Backup",
-      "1 Cetak 12R",
-      "1 Crew (Pengatur Gaya)",
-    ],
+    features: ["1 Album Photobook Standar", "File Backup", "1 Crew (Pengatur Gaya)"],
   },
   {
     id: "wedding-gold",
     serviceId: "wedding",
     name: "Gold",
     slug: "wedding-gold",
-    price: 2_000_000,
-    photographerCount: 2,
+    originalPrice: 2_500_000,
+    price: 2_299_000,
+    photographerCount: 1,
     isPopular: true,
-    features: [
-      "1 Album Photobook Standar 60 Foto",
-      "1 Cetak 12R",
-      "1 Video Cinematic",
-      "All File Backup",
-      "1 Videografer",
-      "1 Crew (Pengatur Gaya)",
-    ],
+    features: ["1 Album Photobook", "Video Cinematic", "File Backup", "1 Videografer", "1 Crew (Pengatur Gaya)"],
   },
   {
-    id: "wedding-diamond",
+    id: "wedding-platinum",
     serviceId: "wedding",
-    name: "Diamond",
-    slug: "wedding-diamond",
-    price: 2_700_000,
-    photographerCount: 2,
+    name: "Platinum",
+    slug: "wedding-platinum",
+    originalPrice: 3_000_000,
+    price: 2_800_000,
+    photographerCount: 1,
     isPopular: false,
-    features: [
-      "1 Album Photobook Standar 60 Foto",
-      "1 Cetak 12R",
-      "1 Video Cinematic + Liputan",
-      "All File Backup",
-      "1 Videografer",
-      "1 Crew (Pengatur Gaya)",
-    ],
+    features: ["1 Album Photobook", "1 Cetak 15R", "Video Cinematic", "File Backup", "1 Videografer", "1 Crew (Pengatur Gaya)"],
   },
-
-  // --- Prewedding ---
   {
     id: "prewedding-silver",
     serviceId: "prewedding",
     name: "Silver",
     slug: "prewedding-silver",
+    originalPrice: 1_000_000,
     price: 800_000,
     photographerCount: 1,
     isPopular: false,
-    features: ["36 Foto Editing", "All File Backup", "1 Crew (Pengatur Gaya)"],
+    features: ["All File Backup", "1 Crew (Pengatur Gaya)"],
   },
   {
     id: "prewedding-gold",
     serviceId: "prewedding",
     name: "Gold",
     slug: "prewedding-gold",
-    price: 1_000_000,
+    originalPrice: 1_800_000,
+    price: 1_499_000,
     photographerCount: 1,
     isPopular: true,
-    features: [
-      "36 Foto Editing",
-      "3 Foto Cetak 12R",
-      "All File Backup",
-      "1 Crew (Pengatur Gaya)",
-    ],
+    features: ["File Backup", "Video Cinematic", "1 Videografer", "1 Crew (Pengatur Gaya)"],
   },
   {
-    id: "prewedding-diamond",
+    id: "prewedding-platinum",
     serviceId: "prewedding",
-    name: "Diamond",
-    slug: "prewedding-diamond",
-    price: 1_500_000,
+    name: "Platinum",
+    slug: "prewedding-platinum",
+    originalPrice: 2_000_000,
+    price: 1_800_000,
     photographerCount: 1,
     isPopular: false,
-    features: [
-      "36 Foto Editing",
-      "3 Foto Cetak 12R",
-      "1 Video Cinematic",
-      "1 Videografer",
-      "1 Crew (Pengatur Gaya)",
-    ],
-  },
-
-  // --- Engagement ---
-  {
-    id: "engagement-full-event",
-    serviceId: "engagement",
-    name: "Full Event",
-    slug: "engagement-full-event",
-    price: 800_000,
-    photographerCount: 1,
-    isPopular: false,
-    features: ["All File Backup + Bonus 20 Foto Editing", "1 Crew (Pengatur Gaya)"],
-    note: CUSTOM_REQUEST_NOTE,
-  },
-
-  // --- Graduation ---
-  {
-    id: "graduation-one-person",
-    serviceId: "graduation",
-    name: "1 Person",
-    slug: "graduation-1-person",
-    price: 300_000,
-    photographerCount: 1,
-    isPopular: false,
-    features: ["All File Backup + Bonus 10 Foto Editing", "2 jam sesi pemotretan"],
-  },
-  {
-    id: "graduation-family",
-    serviceId: "graduation",
-    name: "Family / Pasangan",
-    slug: "graduation-family",
-    price: 500_000,
-    photographerCount: 1,
-    isPopular: false,
-    features: ["All File Backup + Bonus 10 Foto Editing", "2 jam sesi pemotretan"],
-    note: CUSTOM_REQUEST_NOTE,
-  },
-
-  // --- Family Gathering ---
-  {
-    id: "family-gathering-full-event",
-    serviceId: "family-gathering",
-    name: "Full Event",
-    slug: "family-gathering-full-event",
-    price: 800_000,
-    photographerCount: 1,
-    isPopular: false,
-    features: ["All File Backup + Bonus 20 Foto Editing", "1 Crew (Pengatur Gaya)"],
-    note: CUSTOM_REQUEST_NOTE,
-  },
-
-  // --- Event (Birthday, Art Performance) ---
-  {
-    id: "event-full-event",
-    serviceId: "event",
-    name: "Full Event",
-    slug: "event-full-event",
-    price: 800_000,
-    photographerCount: 1,
-    isPopular: false,
-    features: ["All File Backup + Bonus 20 Foto Editing", "1 Crew (Pengatur Gaya)"],
-    note: CUSTOM_REQUEST_NOTE,
+    features: ["Video Cinematic", "All File Backup", "2 Cetak 12R", "1 Videografer", "1 Crew (Pengatur Gaya)"],
   },
 ];
 
-/** All packages belonging to one service (booking Step 2 filters by this). */
+/** All packages belonging to one service (booking screen 1 filters by this). */
 export function getPackagesByService(serviceSlug: string | null): Package[] {
   if (!serviceSlug) return [];
   return PACKAGES.filter((pkg) => pkg.serviceId === serviceSlug);
+}
+
+/** Discount as a whole percentage, e.g. 370K -> 299K is 19%. */
+export function discountPercent(pkg: Package): number {
+  return Math.round(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100);
 }

@@ -17,8 +17,8 @@ export const HERO_PHOTOS = {
     url: "/photos/gallery-prewedding-01.jpg",
     alt: "Fotografer memotret calon pengantin di alam terbuka",
   },
-  event: {
-    url: "/photos/gallery-event-01.jpg",
-    alt: "Confetti beterbangan di tengah perayaan",
+  graduation: {
+    url: "/photos/instagram/DZW0E8wIKCl.jpg",
+    alt: "Wisudawati berselempang merah tersenyum di depan gedung kampus",
   },
 } satisfies Record<string, HeroPhoto>;

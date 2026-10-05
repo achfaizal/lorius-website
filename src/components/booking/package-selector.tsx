@@ -1,8 +1,9 @@
 import { Check, Users } from "lucide-react";
 
 import { getPackagesByService } from "@/data/packages";
-import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/utils";
+
+import { PackagePrice } from "../marketing/package-price";
 
 interface PackageSelectorProps {
   serviceSlug: string | null;
@@ -76,13 +77,7 @@ export function PackageSelector({
               </span>
             </div>
 
-            <span className="text-h2 font-semibold text-brand">
-              {formatRupiah(pkg.price)}
-              <span className="text-caption font-normal text-brand-gray">
-                {" "}
-                / paket
-              </span>
-            </span>
+            <PackagePrice pkg={pkg} />
 
             <ul className="flex flex-col gap-2.5">
               <li className="flex items-center gap-2.5">
@@ -105,9 +100,6 @@ export function PackageSelector({
               ))}
             </ul>
 
-            {pkg.note ? (
-              <p className="text-caption text-brand-gray italic">{pkg.note}</p>
-            ) : null}
           </button>
         );
       })}

@@ -2,6 +2,7 @@ import { MessageCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { formatRupiah } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 interface BookingSummaryProps {
   isLastStep: boolean;
@@ -10,6 +11,8 @@ interface BookingSummaryProps {
   serviceName?: string | null;
   packageName?: string | null;
   packagePrice?: number | null;
+  /** Normal (pre-discount) price, shown struck through when above `packagePrice`. */
+  packageOriginalPrice?: number | null;
   date?: string | null;
   slot?: string | null;
   location?: string | null;
@@ -29,6 +32,7 @@ export function BookingSummary({
   serviceName,
   packageName,
   packagePrice,
+  packageOriginalPrice,
   date,
   slot,
   location,
@@ -45,7 +49,13 @@ export function BookingSummary({
     ["Lokasi", location || "—"],
   ];
 
+  const hasDiscount =
+    packageOriginalPrice != null && packageOriginalPrice > price && price > 0;
+
   const costRows: [string, string][] = [
+    ...(hasDiscount
+      ? ([["Harga Normal", formatRupiah(packageOriginalPrice)]] as [string, string][])
+      : []),
     ["Harga Paket", formatRupiah(price)],
     ["Estimasi DP (50%)", formatRupiah(dp)],
     ["Estimasi Sisa", formatRupiah(price - dp)],
@@ -81,7 +91,14 @@ export function BookingSummary({
             {costRows.map(([label, val]) => (
               <div key={label} className="flex items-center justify-between gap-4">
                 <dt className="text-body text-brand-gray">{label}</dt>
-                <dd className="text-body font-medium text-brand">{val}</dd>
+                <dd
+                  className={cn(
+                    "text-body font-medium text-brand",
+                    label === "Harga Normal" && "text-brand-gray line-through",
+                  )}
+                >
+                  {val}
+                </dd>
               </div>
             ))}
           </dl>

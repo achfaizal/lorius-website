@@ -52,7 +52,7 @@ export function buildBookingWhatsAppMessage(booking: BookingMessageData): string
     "",
     "*RINCIAN LAYANAN*",
     `- *Layanan:* ${service?.name ?? booking.serviceSlug}`,
-    `- *Paket:* ${pkg?.name ?? booking.packageId}${pkg ? ` (${formatRupiah(pkg.price)})` : ""}`,
+    `- *Paket:* ${pkg?.name ?? booking.packageId}${pkg ? ` (${formatRupiah(pkg.price)}, harga normal ${formatRupiah(pkg.originalPrice)})` : ""}`,
     ...packageLines,
     `- *Tanggal:* ${formatBookingDate(new Date(`${booking.date}T00:00:00`))}`,
     `- *Waktu:* ${time}`,

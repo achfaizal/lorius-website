@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   title: "Lorius Photography Bandung | Wedding, Prewedding & Graduation",
   description:
-    "Abadikan momen terbaik bersama Lorius. Fotografi wedding, prewedding, engagement, graduation, dan event di Bandung dengan pengalaman booking yang mudah.",
+    "Abadikan momen terbaik bersama Lorius. Fotografi wedding, prewedding, engagement, dan graduation di Bandung dengan pengalaman booking yang mudah.",
 };
 
 // Homepage — full sitemap order per blueprint §8. Trust/Quick Benefit

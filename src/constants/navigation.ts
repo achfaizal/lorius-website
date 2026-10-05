@@ -53,5 +53,4 @@ export const FOOTER_SERVICES: ServiceLink[] = [
   { label: "Wedding", slug: "wedding" },
   { label: "Graduation", slug: "graduation" },
   { label: "Engagement", slug: "engagement" },
-  { label: "Event", slug: "event" },
 ];

@@ -240,6 +240,7 @@ export function BookingFlow() {
           serviceName={selectedService?.name}
           packageName={selectedPackage?.name}
           packagePrice={selectedPackage?.price}
+          packageOriginalPrice={selectedPackage?.originalPrice}
           date={selectedDate ? formatBookingDate(selectedDate) : null}
           slot={selectedSlot}
           location={info.location}

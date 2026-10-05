@@ -17,8 +17,8 @@ interface CollageSlot {
 }
 
 /**
- * Trimmed from the blueprint's 4 hero categories (wedding/prewedding/
- * graduation/event) to 3 for a cleaner, less cluttered composition —
+ * Trimmed from the blueprint's 4 hero categories to 3 (wedding/prewedding/
+ * graduation) for a cleaner, less cluttered composition —
  * documented as a decision in the TASK 03 report. Photos are Unsplash
  * placeholders (src/data/photos.ts) until real Lorius photography exists.
  */
@@ -38,8 +38,8 @@ const SLOTS: CollageSlot[] = [
       "bottom-0 right-0 h-[56%] w-[52%] rounded-3xl ring-4 ring-surface",
   },
   {
-    label: "Event",
-    photo: HERO_PHOTOS.event,
+    label: "Graduation",
+    photo: HERO_PHOTOS.graduation,
     delay: 0.3,
     position:
       "right-2 top-0 hidden h-[32%] w-[36%] rounded-2xl ring-4 ring-surface sm:block",

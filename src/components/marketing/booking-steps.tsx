@@ -43,7 +43,7 @@ function FieldMock({ label, value }: { label: string; value?: string }) {
   );
 }
 
-/** "Rp1,5 jt" — compact so three price cards always fit side by side. */
+/** "Rp1,299 jt" — compact so three price cards always fit side by side. */
 function formatShortPrice(price: number) {
   return `Rp${(price / 1_000_000).toLocaleString("id-ID")} jt`;
 }
@@ -94,8 +94,13 @@ function StepPreview({ index }: { index: number }) {
                 )}
               >
                 <span className="text-xs font-semibold">{pkg.name}</span>
-                <span className="text-sm font-bold whitespace-nowrap">
-                  {formatShortPrice(pkg.price)}
+                <span className="flex flex-col items-end min-[480px]:items-start">
+                  <span className="text-[10px] leading-tight text-brand-gray line-through">
+                    {formatShortPrice(pkg.originalPrice)}
+                  </span>
+                  <span className="text-sm font-bold whitespace-nowrap">
+                    {formatShortPrice(pkg.price)}
+                  </span>
                 </span>
                 <span className="mt-1 hidden h-1.5 w-full rounded-full bg-brand/10 min-[480px]:block" />
                 <span className="hidden h-1.5 w-3/4 rounded-full bg-brand/10 min-[480px]:block" />

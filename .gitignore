@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Raw photo dumps (hundreds of MB) — never commit/deploy; resize the picks into public/photos/ first.
+/public/photos/Selected-*

@@ -12,7 +12,7 @@ export const SITE = {
   name: "Lorius",
   tagline: "moments worth keeping",
   description:
-    "Fotografi wedding, prewedding, engagement, graduation, dan event — dikemas hangat, personal, dan mudah dibooking online.",
+    "Fotografi wedding, prewedding, engagement, dan graduation — dikemas hangat, personal, dan mudah dibooking online.",
   city: "Bandung",
   // Real production URL, once known — see .env.example. Falls back to a
   // lorius.id placeholder (matching the old email sender's

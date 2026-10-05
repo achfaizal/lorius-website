@@ -53,9 +53,9 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     id: "tst-05",
     customerName: "Tama",
-    sessionType: "Event",
+    sessionType: "Graduation",
     quote:
-      "Dokumentasi acara komunitas kami digarap serius meski budgetnya nggak besar. Tim-nya profesional dan hasil fotonya jauh di atas ekspektasi.",
+      "Sesi wisuda kami berjalan lancar dan seru. Fotografernya sabar mengarahkan gaya, dan hasil fotonya jauh di atas ekspektasi.",
     rating: 4,
     featured: true,
   },
