@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lorius Website & Booking System
 
-## Getting Started
+Production website for **Lorius** — photography for moments worth keeping.
 
-First, run the development server:
+Built with Next.js (App Router), TypeScript, Tailwind CSS, and shadcn/ui.
+See [docs/BLUEPRINT_LORIUS_WEBSITE_BOOKING.md](./docs/BLUEPRINT_LORIUS_WEBSITE_BOOKING.md)
+for the full product/design/technical spec, and
+[docs/Lorius_Brand_Guideline_2026.pdf](./docs/Lorius_Brand_Guideline_2026.pdf)
+for the official brand identity (logo usage, color, typography) — these are
+the source of truth for this project. Development proceeds task-by-task per
+the blueprint's §68.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) (Next.js will pick the
+next free port if 3000 is taken).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How booking works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The site stores nothing and takes no payment. `/booking` is a 2-screen form
+(service + package, then date/time + a short contact form); its last button
+opens WhatsApp with the booking summary prefilled (`src/lib/booking-whatsapp.ts`)
+and sends the customer back to the homepage. The Lorius admin confirms the
+schedule, final price, and payment in that chat. The only environment
+variables are the optional site URL and Google Analytics ID — see
+`.env.example`.
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js (App Router) + TypeScript (strict)
+- Tailwind CSS v4 + shadcn/ui
+- Poppins via `next/font` (the only typeface in the brand guideline)
+- React Hook Form + Zod, date-fns, Framer Motion, Lucide icons
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Brand assets
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Official logo files live in [public/logo/](./public/logo/) (`Logo.png` /
+`Logo_bg.png` — primary/reverse wordmark, `Icon.png` / `Icon2.png` —
+primary/reverse monogram), referenced by `LoriusLogo` / `LoriusMark`
+([src/components/brand](./src/components/brand)). See the brand guideline
+PDF above for usage rules (safe area, minimum size, backgrounds to avoid).
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```text
+src/
+├── app/            # routes (App Router)
+├── components/
+│   ├── brand/      # LoriusLogo, LoriusMark
+│   ├── layout/     # SiteContainer, Section, SectionHeading
+│   ├── marketing/  # homepage sections (Navbar, Hero, Footer, ...)
+│   ├── gallery/     # portfolio grid, filter, lightbox
+│   └── ui/         # shadcn/ui primitives
+├── data/           # content that's realistically CMS-editable later
+├── constants/      # structural/site config (nav links, contact info)
+└── lib/            # utils (cn, format, whatsapp, booking message, etc.)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`components/booking/` holds the booking flow and `components/gallery/` the
+portfolio; photos live in [public/photos/](./public/photos/) (see its README).

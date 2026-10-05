@@ -1,26 +1,309 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------- */
+/* Lorius brand tokens — raw values from the brand guideline.            */
+/* Kept as plain CSS vars so they stay usable outside Tailwind utilities   */
+/* (inline styles, third-party components, etc.).                         */
+/* ---------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --lorius-teal: #0e363c;
+  --lorius-cyan: #27c6d1;
+  /* The brand guideline's literal value is #7a7a7a, but every use of this
+     token in the app is body/caption text (`text-brand-gray`), and that
+     exact value fails WCAG AA (4.5:1) against every surface tone the app
+     uses (white/off-white/cream/soft-teal — ratios 3.82-4.29). Darkened
+     one step to the nearest AA-safe gray (TASK 20 accessibility pass,
+     confirmed by the user to take priority over the literal PDF value for
+     this specific token) — visually reads the same as "brand gray", not
+     a different color choice. --lorius-teal/-cyan above are unaffected. */
+  --lorius-gray: #6e6e6e;
+  --lorius-off-white: #fafaf7;
+  --lorius-white: #ffffff;
+  --lorius-border: #e7ecec;
+  --lorius-soft-teal: #eff8f8;
+  --lorius-cream: #f6f1e8;
 }
 
 @theme inline {
+  /* Semantic brand utilities — bg-brand, text-brand, border-brand,
+     bg-brand-cyan, text-brand-cyan, bg-surface, bg-surface-soft-teal, ... */
+  --color-brand: var(--lorius-teal);
+  --color-brand-foreground: var(--lorius-white);
+  --color-brand-cyan: var(--lorius-cyan);
+  --color-brand-gray: var(--lorius-gray);
+  --color-surface: var(--lorius-off-white);
+  --color-surface-soft-teal: var(--lorius-soft-teal);
+  --color-surface-cream: var(--lorius-cream);
+  --color-surface-white: var(--lorius-white);
+
+  /* shadcn/ui structural tokens, re-themed to the Lorius palette. */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  /* No separate heading typeface in the brand guideline — Poppins covers
+     H1 down through caption. Aliased (not removed) because shadcn's own
+     Dialog/Sheet titles reference the `font-heading` utility class. */
+  --font-heading: var(--font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Radius scale — base tuned so buttons/inputs land at 10-12px per the
+     Lorius button/form spec, while 2xl/3xl approximate the 20-28px
+     "photo card" radius from the blueprint. See --radius-pill for the
+     explicit pill token. */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-pill: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: var(--lorius-off-white);
+  --foreground: var(--lorius-teal);
+  --card: var(--lorius-white);
+  --card-foreground: var(--lorius-teal);
+  --popover: var(--lorius-white);
+  --popover-foreground: var(--lorius-teal);
+  --primary: var(--lorius-teal);
+  --primary-foreground: var(--lorius-white);
+  --secondary: var(--lorius-soft-teal);
+  --secondary-foreground: var(--lorius-teal);
+  --muted: var(--lorius-soft-teal);
+  --muted-foreground: var(--lorius-gray);
+  --accent: var(--lorius-soft-teal);
+  --accent-foreground: var(--lorius-teal);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--lorius-border);
+  --input: var(--lorius-border);
+  --ring: var(--lorius-cyan);
+  --chart-1: var(--lorius-teal);
+  --chart-2: var(--lorius-cyan);
+  --chart-3: var(--lorius-gray);
+  --chart-4: oklch(0.556 0 0);
+  --chart-5: oklch(0.371 0 0);
+  --radius: 0.75rem;
+  --sidebar: var(--lorius-off-white);
+  --sidebar-foreground: var(--lorius-teal);
+  --sidebar-primary: var(--lorius-teal);
+  --sidebar-primary-foreground: var(--lorius-white);
+  --sidebar-accent: var(--lorius-soft-teal);
+  --sidebar-accent-foreground: var(--lorius-teal);
+  --sidebar-border: var(--lorius-border);
+  --sidebar-ring: var(--lorius-cyan);
+}
+
+/* Dark mode is not part of the Lorius brand today. This keeps shadcn/ui
+   primitives (which reference `.dark`) from breaking if it is ever toggled,
+   without designing a full dark palette prematurely. */
+.dark {
+  --background: var(--lorius-teal);
+  --foreground: var(--lorius-white);
+  --card: #123f46;
+  --card-foreground: var(--lorius-white);
+  --popover: #123f46;
+  --popover-foreground: var(--lorius-white);
+  --primary: var(--lorius-cyan);
+  --primary-foreground: var(--lorius-teal);
+  --secondary: #123f46;
+  --secondary-foreground: var(--lorius-white);
+  --muted: #123f46;
+  --muted-foreground: #a9c4c6;
+  --accent: #123f46;
+  --accent-foreground: var(--lorius-white);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: rgb(255 255 255 / 12%);
+  --input: rgb(255 255 255 / 15%);
+  --ring: var(--lorius-cyan);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  html {
+    @apply font-sans;
+    /* Safety net: nested horizontal-scroll containers (e.g. the testimonial
+       carousel's scroll-snap track) can otherwise leak into the root
+       element's scrollWidth and make the whole page horizontally
+       scrollable. Inner elements keep their own overflow-x: auto/scroll. */
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--lorius-cyan);
+    color: var(--lorius-teal);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--lorius-cyan);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* TASK 20: navbar/footer links to /paket, /galeri, /testimoni, /tentang,
+     /kontak now scroll to the matching homepage section instead of a
+     dedicated page that doesn't exist (see the sitemap.ts comment for
+     why). Offsets the jump so a sticky header (h-16/h-20, see Navbar)
+     never covers the section's heading. */
+  section[id],
+  footer[id] {
+    scroll-margin-top: 5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------------------------------------------------------------------- */
+/* Typography scale — per docs/Lorius_Brand_Guideline_2026.pdf §3 "Hierarki */
+/* Tipografi": Poppins for everything (no separate serif/heading face).   */
+/* H1/H2/Body/Caption sizes, weights, tracking and line-heights below     */
+/* match the guideline exactly; `display` (bigger than H1, for the one    */
+/* hero moment) and `h3` (between H2 and body) aren't in the guideline —  */
+/* interpolated to fit the same system. Fluid via clamp() between the     */
+/* guideline's mobile/desktop figures.                                    */
+/* ---------------------------------------------------------------------- */
+@utility text-display {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-size: clamp(2.25rem, 1.25rem + 3vw, 4rem);
+}
+
+@utility text-h1 {
+  /* Guideline H1: Poppins Bold, 48-64px, tracking -1%. */
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-size: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+}
+
+@utility text-h2 {
+  /* Guideline H2: Poppins SemiBold, 28-36px, tracking 0%. */
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
+  font-size: clamp(1.5rem, 1.3rem + 1vw, 2.25rem);
+}
+
+@utility text-h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.3;
+  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+}
+
+@utility text-body {
+  /* Guideline Body: Poppins Regular, 14-16px, tracking 0%, line-height 150%. */
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+}
+
+@utility text-caption {
+  /* Guideline Caption: Poppins Regular, 12px, tracking 0%, line-height 140%. */
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.4;
+  font-size: clamp(0.75rem, 0.72rem + 0.1vw, 0.8125rem);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Entrance animations that run in pure CSS (no JS), so above-the-fold    */
+/* content paints and animates on first frame instead of waiting for      */
+/* hydration — keeps hero LCP fast. `--delay` sets the stagger.           */
+/* ---------------------------------------------------------------------- */
+@keyframes lorius-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lorius-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility animate-rise {
+  animation: lorius-rise 0.5s ease-out both;
+  animation-delay: var(--delay, 0s);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility animate-pop {
+  animation: lorius-pop 0.45s ease-out both;
+  animation-delay: var(--delay, 0s);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility text-section-title {
+  /* Section headings on the homepage — bigger than h2, below the hero display. */
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.875rem, 1.4rem + 2.2vw, 3.25rem);
 }
