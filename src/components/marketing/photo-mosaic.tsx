@@ -3,24 +3,26 @@ import Image from "next/image";
 import { Section } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 
-/** Lorius' own Instagram photos (local copies in `public/photos/instagram/`), so this block never depends on a live fetch. */
-const PHOTO_CODES = [
-  "Dd_OGdEoPH3",
-  "DcVj7PHoO84",
-  "DZW0E8wIKCl",
-  "DTKz3u1iW16",
-  "DReLFnlCTs7",
-  "DRYmXdTCbL5",
-  "DQtazWMCfyd",
-  "DQphsFvCNQO",
-  "DcsXEaqoCOj",
+/** Lorius' own portfolio photos (`public/photos/gallery/`) — a mix of all four services. */
+const PHOTO_IDS = [
+  "wedding-13",
+  "graduation-09",
+  "prewedding-04",
+  "wedding-47",
+  "engagement-05",
+  "graduation-11",
+  "wedding-33",
+  "prewedding-07",
+  "wedding-21",
+  "engagement-08",
+  "wedding-52",
+  "graduation-02",
 ];
-const PHOTOS = PHOTO_CODES.map((code) => `/photos/instagram/${code}.jpg`);
+const PHOTOS = PHOTO_IDS.map((id) => `/photos/gallery/${id}.jpg`);
 
-// 12 desktop tiles (6 columns x 2 rows) from the 9 photos. Stepping by 5
-// (mod 9) keeps every horizontal and vertical neighbour different, and the
-// first 9 tiles — the 3 x 3 mobile grid — are all unique.
-const TILES = Array.from({ length: 12 }, (_, i) => PHOTOS[(i * 5) % PHOTOS.length]);
+// 12 desktop tiles (6 columns x 2 rows); the first 9 are the 3 x 3 phone grid.
+// All 12 photos are different, so no neighbours repeat.
+const TILES = PHOTOS;
 
 /**
  * Homepage photo block: a tidy, static grid of Lorius' photos used as a

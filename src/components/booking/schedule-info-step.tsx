@@ -8,6 +8,7 @@ import { ScheduleStep } from "./schedule-step";
 interface ScheduleInfoStepProps {
   date: Date | null;
   slot: string | null;
+  durationHours: number | null;
   onDateChange: (date: Date | null) => void;
   onSlotChange: (slot: string | null) => void;
   info: Partial<QuickInfoValues>;
@@ -18,6 +19,7 @@ interface ScheduleInfoStepProps {
 export function ScheduleInfoStep({
   date,
   slot,
+  durationHours,
   onDateChange,
   onSlotChange,
   info,
@@ -30,6 +32,7 @@ export function ScheduleInfoStep({
         <ScheduleStep
           date={date}
           slot={slot}
+          durationHours={durationHours}
           onDateChange={onDateChange}
           onSlotChange={onSlotChange}
         />

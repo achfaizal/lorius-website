@@ -18,7 +18,13 @@ export type AnalyticsEvent =
   | "booking_started"
   | "booking_step_completed"
   | "booking_completed"
-  | "booking_abandoned";
+  | "booking_abandoned"
+  | "photobooth_open"
+  | "photobooth_start"
+  | "photobooth_complete"
+  | "photobooth_shot"
+  | "photobooth_download"
+  | "photobooth_share";
 
 /**
  * Whether `<GoogleAnalytics>` is actually mounted (root layout only

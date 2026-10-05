@@ -12,6 +12,8 @@ export interface BookingMessageData {
   /** YYYY-MM-DD */
   date: string;
   slot: string;
+  /** Fixed shoot length from the package, when it has one (then `slot` is just its label). */
+  durationHours?: number;
   info: QuickInfoValues;
 }
 
@@ -39,7 +41,11 @@ export function buildBookingWhatsAppMessage(booking: BookingMessageData): string
     : [];
 
   // "08:00–10:00" -> "08:00 – 10:00 WIB"
-  const time = `${booking.slot.replace("–", " – ")} WIB`;
+  // Fixed-length packages (Graduation) carry no clock time: the start time is
+  // agreed with the admin in the chat.
+  const time = booking.durationHours
+    ? `${booking.durationHours} jam kerja (jam mulai dikonsultasikan lewat WhatsApp)`
+    : `${booking.slot.replace("–", " – ")} WIB`;
 
   const lines = [
     "Halo admin Lorius, saya mau booking jadwal pemotretan.",

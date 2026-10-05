@@ -9,6 +9,8 @@ import {
   HeroSection,
   PackageGrid,
   PhotoMosaic,
+  PhotoboothEventSection,
+  PhotoboothSection,
   TestimonialSection,
   WhySection,
 } from "@/components/marketing";
@@ -35,6 +37,8 @@ export default function Home() {
       <WhySection />
       <BookingStepsSection />
       <PackageGrid />
+      <PhotoboothSection />
+      <PhotoboothEventSection />
       <TestimonialSection />
       <FaqSection />
       <CtaSection />

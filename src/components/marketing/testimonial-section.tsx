@@ -2,7 +2,7 @@ import { Section, SectionHeading } from "@/components/layout";
 import { Reveal } from "@/components/motion";
 import { TESTIMONIALS } from "@/data/testimonials";
 
-import { TestimonialCarousel } from "./testimonial-carousel";
+import { TestimonialMarquee } from "./testimonial-marquee";
 
 /**
  * Blueprint §16 "Testimonials". `id="testimoni"` is the navbar's
@@ -11,7 +11,7 @@ import { TestimonialCarousel } from "./testimonial-carousel";
  */
 export function TestimonialSection() {
   return (
-    <Section id="testimoni" background="white" waveFrom="cream">
+    <Section id="testimoni" background="white" waveFrom="brand">
       <SectionHeading
         align="center"
         title="Apa Kata Mereka"
@@ -19,7 +19,7 @@ export function TestimonialSection() {
       />
 
       <Reveal className="mt-12">
-        <TestimonialCarousel items={TESTIMONIALS} />
+        <TestimonialMarquee items={TESTIMONIALS} />
       </Reveal>
     </Section>
   );

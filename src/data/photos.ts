@@ -1,7 +1,5 @@
 /**
- * Hero collage photos — placeholder stock photography vendored locally in
- * `public/photos/` (originally Unsplash, free Unsplash License) until real
- * Lorius photos replace them. See public/photos/README.md.
+ * Hero collage photos — from Lorius' own portfolio (`public/photos/gallery/`).
  */
 export interface HeroPhoto {
   url: string;
@@ -10,15 +8,15 @@ export interface HeroPhoto {
 
 export const HERO_PHOTOS = {
   wedding: {
-    url: "/photos/gallery-wedding-01.jpg",
-    alt: "Pasangan pengantin memegang buket bunga saat golden hour",
+    url: "/photos/gallery/wedding-13.jpg",
+    alt: "Pengantin berkebaya dengan siger berdiri anggun di aula berkubah putih",
   },
-  prewedding: {
-    url: "/photos/gallery-prewedding-01.jpg",
-    alt: "Fotografer memotret calon pengantin di alam terbuka",
+  engagement: {
+    url: "/photos/gallery/engagement-06.jpg",
+    alt: "Perempuan berhijab biru muda dengan latar bunga saat sesi engagement",
   },
   graduation: {
-    url: "/photos/instagram/DZW0E8wIKCl.jpg",
-    alt: "Wisudawati berselempang merah tersenyum di depan gedung kampus",
+    url: "/photos/gallery/graduation-09.jpg",
+    alt: "Wisudawati berselempang di antara bunga ungu",
   },
 } satisfies Record<string, HeroPhoto>;

@@ -307,3 +307,31 @@
   letter-spacing: -0.01em;
   font-size: clamp(1.875rem, 1.4rem + 2.2vw, 3.25rem);
 }
+
+/* Gentle idle bob for decorative photobooth props. */
+@keyframes lorius-float {
+  0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  50% { transform: translateY(-8px) rotate(var(--tilt, 0deg)); }
+}
+
+@utility animate-float {
+  animation: lorius-float 5s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transform: rotate(var(--tilt, 0deg));
+  }
+}
+
+/* Endlessly drifting row (testimonials). The track holds the list twice, so
+   moving it by half its width loops seamlessly. Pauses on hover/focus. */
+@keyframes lorius-marquee {
+  to { transform: translateX(-50%); }
+}
+
+@utility animate-marquee {
+  animation: lorius-marquee var(--marquee-duration, 90s) linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

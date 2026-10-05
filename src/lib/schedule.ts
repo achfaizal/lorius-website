@@ -19,6 +19,9 @@ export const TIME_SLOTS = [
   "17:00–19:00",
 ] as const;
 
+/** "1 jam kerja" — the fixed shoot length of packages that define one (Graduation). */
+export const formatWorkDuration = (hours: number) => `${hours} jam kerja`;
+
 /** "Senin, 12 Januari 2026" for the booking summary and WhatsApp message. */
 export function formatBookingDate(date: Date): string {
   return format(date, "EEEE, d MMMM yyyy", { locale: idLocale });

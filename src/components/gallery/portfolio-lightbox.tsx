@@ -60,18 +60,22 @@ export function PortfolioLightbox({
       }}
     >
       <DialogContent className="max-w-2xl gap-3 rounded-2xl bg-surface-white p-3 sm:max-w-2xl">
-        <DialogTitle className="sr-only">{item.title}</DialogTitle>
+        <DialogTitle className="sr-only">
+          Foto {GALLERY_CATEGORY_LABEL[item.category]}
+        </DialogTitle>
         <DialogDescription className="sr-only">
-          Foto {GALLERY_CATEGORY_LABEL[item.category]}: {item.title}
+          Foto {(activeIndex ?? 0) + 1} dari {items.length}
         </DialogDescription>
 
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
+        {/* Portraits dominate the portfolio, so show the whole photo
+            (contain, not crop) in a tall frame. */}
+        <div className="relative h-[72vh] w-full overflow-hidden rounded-xl bg-brand/5">
           <Image
             src={item.imageUrl}
             alt={item.imageAlt}
             fill
             sizes="(min-width: 640px) 640px, 100vw"
-            className="object-cover"
+            className="object-contain"
             priority
           />
 
@@ -105,10 +109,9 @@ export function PortfolioLightbox({
           <div>
             {/* text-brand-gray, not text-brand-cyan — same WCAG AA text-
                 contrast fix as SectionHeading's eyebrow (TASK 20). */}
-            <p className="text-caption font-medium text-brand-gray uppercase tracking-wide">
+            <p className="text-body font-medium text-brand">
               {GALLERY_CATEGORY_LABEL[item.category]}
             </p>
-            <p className="text-body font-medium text-brand">{item.title}</p>
           </div>
           {items.length > 1 ? (
             <p className="text-caption text-brand-gray">

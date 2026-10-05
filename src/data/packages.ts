@@ -17,6 +17,12 @@ export interface Package {
   /** Normal price in rupiah, shown struck through. Always above `price`. */
   originalPrice: number;
   photographerCount: number;
+  /**
+   * Fixed length of the shoot in hours, when the package defines one (only
+   * Graduation does: 1 / 1 / 3 hours). The booking form then fills the session
+   * length in automatically and only asks for a start time.
+   */
+  durationHours?: number;
   isPopular: boolean;
   features: string[];
 }
@@ -30,6 +36,7 @@ export const PACKAGES: Package[] = [
     originalPrice: 370_000,
     price: 299_000,
     photographerCount: 1,
+    durationHours: 1,
     isPopular: false,
     features: ["1 Person", "All File Backup", "50 Foto Editing", "1 Jam Kerja"],
   },
@@ -41,6 +48,7 @@ export const PACKAGES: Package[] = [
     originalPrice: 500_000,
     price: 350_000,
     photographerCount: 1,
+    durationHours: 1,
     isPopular: true,
     features: ["Family / Couple", "File Backup", "Semua Foto Editing", "50 Foto Editing", "1 Jam Kerja"],
   },
@@ -52,6 +60,7 @@ export const PACKAGES: Package[] = [
     originalPrice: 1_500_000,
     price: 1_200_000,
     photographerCount: 1,
+    durationHours: 3,
     isPopular: false,
     features: ["Video Cinematic", "All File Backup", "Semua Foto Editing", "1 Videografer", "1 Crew (Pengatur Gaya)", "3 Jam Kerja"],
   },

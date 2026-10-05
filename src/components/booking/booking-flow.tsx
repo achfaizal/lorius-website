@@ -15,7 +15,7 @@ import { PACKAGES } from "@/data/packages";
 import { trackEvent } from "@/lib/analytics";
 import { generateBookingCode } from "@/lib/booking-code";
 import { buildBookingWhatsAppMessage } from "@/lib/booking-whatsapp";
-import { formatBookingDate } from "@/lib/schedule";
+import { formatBookingDate, formatWorkDuration } from "@/lib/schedule";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import type { QuickInfoValues } from "@/lib/validations/quick-info";
 
@@ -88,6 +88,11 @@ export function BookingFlow() {
   const isLastStep = currentIndex === BOOKING_FLOW_STEPS.length - 1;
   const selectedService = BOOKING_SERVICES.find((s) => s.slug === serviceSlug);
   const selectedPackage = PACKAGES.find((p) => p.id === packageId);
+  // Fixed-length packages (Graduation) have no time to pick: the time field is
+  // the package's own duration, and the start time is agreed over WhatsApp.
+  const durationHours = selectedPackage?.durationHours ?? null;
+  const timeLabel =
+    durationHours != null ? formatWorkDuration(durationHours) : selectedSlot;
 
   // `booking_started` once per visit to /booking (no synchronous setState
   // here — see the react-hooks/set-state-in-effect gotcha documented in
@@ -124,7 +129,7 @@ export function BookingFlow() {
   const advanceDisabled =
     (step.id === "paket" && (!serviceSlug || !packageId)) ||
     (step.id === "jadwal" &&
-      (!selectedDate || !selectedSlot || !infoValid));
+      (!selectedDate || !timeLabel || !infoValid));
 
   /**
    * Final step: the website stores nothing — the booking *is* the WhatsApp
@@ -137,7 +142,7 @@ export function BookingFlow() {
       !serviceSlug ||
       !selectedPackage ||
       !selectedDate ||
-      !selectedSlot ||
+      !timeLabel ||
       !infoValid
     ) {
       return;
@@ -148,7 +153,8 @@ export function BookingFlow() {
       serviceSlug,
       packageId: selectedPackage.id,
       date: format(selectedDate, "yyyy-MM-dd"),
-      slot: selectedSlot,
+      slot: timeLabel,
+      durationHours: selectedPackage.durationHours,
       info: info as QuickInfoValues,
     });
     const url = buildWhatsAppUrl(SITE.whatsappNumber, message);
@@ -186,6 +192,8 @@ export function BookingFlow() {
               packageId={packageId}
               onServiceChange={(slug) => {
                 setServiceSlug(slug);
+                // The time format depends on the package (start time vs. standard block).
+                setSelectedSlot(null);
                 trackEvent("select_service", { service: slug });
                 // A package chosen under a previous service is no longer
                 // valid once the service changes (packages are per-service).
@@ -197,6 +205,7 @@ export function BookingFlow() {
               }}
               onPackageChange={(id) => {
                 setPackageId(id);
+                setSelectedSlot(null);
                 trackEvent("select_package", { package: id });
               }}
             />
@@ -204,6 +213,7 @@ export function BookingFlow() {
             <ScheduleInfoStep
               date={selectedDate}
               slot={selectedSlot}
+              durationHours={durationHours}
               onDateChange={(date) => {
                 setSelectedDate(date);
                 if (date) {
@@ -242,7 +252,7 @@ export function BookingFlow() {
           packagePrice={selectedPackage?.price}
           packageOriginalPrice={selectedPackage?.originalPrice}
           date={selectedDate ? formatBookingDate(selectedDate) : null}
-          slot={selectedSlot}
+          slot={timeLabel}
           location={info.location}
         />
       </div>

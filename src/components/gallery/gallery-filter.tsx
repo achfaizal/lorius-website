@@ -2,11 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-import {
-  GALLERY_CATEGORY_LABEL,
-  GALLERY_ITEMS,
-  type GalleryCategory,
-} from "@/data/gallery";
+import { GALLERY_CATEGORY_LABEL, type GalleryCategory } from "@/data/gallery";
 import { cn } from "@/lib/utils";
 
 export type GalleryFilterValue = GalleryCategory | "all";
@@ -16,22 +12,17 @@ interface GalleryFilterProps {
   onChange: (value: GalleryFilterValue) => void;
 }
 
-const countFor = (value: GalleryFilterValue) =>
-  value === "all"
-    ? GALLERY_ITEMS.length
-    : GALLERY_ITEMS.filter((item) => item.category === value).length;
-
-const OPTIONS: { value: GalleryFilterValue; label: string; count: number }[] = [
-  { value: "all", label: "Semua", count: countFor("all") },
+const OPTIONS: { value: GalleryFilterValue; label: string }[] = [
+  { value: "all", label: "Semua" },
   ...(Object.entries(GALLERY_CATEGORY_LABEL) as [GalleryCategory, string][]).map(
-    ([value, label]) => ({ value, label, count: countFor(value) }),
+    ([value, label]) => ({ value, label }),
   ),
 ];
 
 /**
  * Category filter — blueprint §12. A pill-shaped segmented control: the dark
- * "active" pill slides between options (shared `layoutId`) and each option
- * shows how many photos it holds. Scrolls sideways on narrow screens.
+ * "active" pill slides between options (shared `layoutId`). Scrolls sideways
+ * on narrow screens.
  */
 export function GalleryFilter({ active, onChange }: GalleryFilterProps) {
   const reduceMotion = useReducedMotion();
@@ -67,17 +58,7 @@ export function GalleryFilter({ active, onChange }: GalleryFilterProps) {
                 }
               />
             ) : null}
-            <span className="relative flex items-center gap-1.5">
-              {option.label}
-              <span
-                className={cn(
-                  "text-[11px] font-semibold",
-                  isActive ? "text-brand-cyan" : "text-brand-gray",
-                )}
-              >
-                {option.count}
-              </span>
-            </span>
+            <span className="relative">{option.label}</span>
           </button>
         );
       })}
