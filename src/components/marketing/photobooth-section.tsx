@@ -7,8 +7,8 @@ import { PhotoboothLauncher } from "./photobooth-launcher";
 import { PhotoboothVisual } from "./photobooth-visual";
 
 const POINTS = [
-  { icon: Sparkles, text: "3 bingkai bermerek Lorius: strip, polaroid, dan duo." },
-  { icon: Camera, text: "Hitung mundur otomatis, bisa ulang tiap foto, plus pilihan filter." },
+  { icon: Sparkles, text: "12 bingkai bermerek Lorius: bulat, lengkung, hati, bunga, dan lainnya." },
+  { icon: Camera, text: "Hitung mundur otomatis, dan bisa ulang tiap foto." },
   { icon: Download, text: "Unduh atau bagikan hasilnya langsung dari browser." },
 ];
 

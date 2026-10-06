@@ -32,7 +32,6 @@ export function FrameStep({ onChoose }: FrameStepProps) {
         const canvas = await composeBooth({
           template,
           photos: template.slots.map((_, i) => samples[i % samples.length]),
-          filterCss: "none",
           mirror: false,
           scale: PREVIEW_WIDTH / template.width,
         });
@@ -49,7 +48,7 @@ export function FrameStep({ onChoose }: FrameStepProps) {
   }, []);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-5 py-8 sm:py-12">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-5 py-8 sm:py-12">
       <div className="flex flex-col gap-2 text-center">
         <h2 className="text-h2 text-brand-foreground">Pilih bingkaimu</h2>
         <p className="text-body text-brand-foreground/75">
@@ -58,7 +57,7 @@ export function FrameStep({ onChoose }: FrameStepProps) {
         </p>
       </div>
 
-      <ul className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+      <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
         {BOOTH_TEMPLATES.map((template) => (
           <li key={template.id}>
             <button
@@ -79,9 +78,9 @@ export function FrameStep({ onChoose }: FrameStepProps) {
                 )}
               </div>
               <div className="flex flex-col gap-1">
-                <span className="flex items-center justify-between gap-2">
+                <span className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                   <span className="text-h3 text-brand-foreground">{template.name}</span>
-                  <span className="rounded-full bg-brand-cyan px-2.5 py-1 text-[11px] font-semibold text-brand">
+                  <span className="rounded-full bg-brand-cyan px-2.5 py-1 text-[11px] whitespace-nowrap font-semibold text-brand">
                     {template.slots.length} foto
                   </span>
                 </span>

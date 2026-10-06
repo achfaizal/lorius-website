@@ -12,9 +12,7 @@ import {
   coverRect,
   downloadBlob,
 } from "@/lib/photobooth/compose";
-import { BOOTH_FILTERS, filterCssFor } from "@/lib/photobooth/filters";
 import type { BoothTemplate } from "@/lib/photobooth/templates";
-import { cn } from "@/lib/utils";
 
 /** Preview width in pixels; the exported file is rendered larger. */
 const PREVIEW_WIDTH = 720;
@@ -23,11 +21,9 @@ const EXPORT_SCALE = 1.5;
 function RetakeThumb({
   bitmap,
   mirror,
-  filterCss,
 }: {
   bitmap: ImageBitmap;
   mirror: boolean;
-  filterCss: string;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -39,13 +35,12 @@ function RetakeThumb({
     canvas.width = size;
     canvas.height = size;
     const { sx, sy, sw, sh } = coverRect(bitmap.width, bitmap.height, { x: 0, y: 0, w: 1, h: 1 });
-    if (filterCss !== "none" && "filter" in ctx) ctx.filter = filterCss;
     if (mirror) {
       ctx.translate(size, 0);
       ctx.scale(-1, 1);
     }
     ctx.drawImage(bitmap, sx, sy, sw, sh, 0, 0, size, size);
-  }, [bitmap, mirror, filterCss]);
+  }, [bitmap, mirror]);
 
   return <canvas ref={ref} className="size-full object-cover" />;
 }
@@ -54,20 +49,16 @@ interface ResultStepProps {
   template: BoothTemplate;
   shots: (ImageBitmap | null)[];
   mirror: boolean;
-  filterId: string;
-  onFilterChange: (id: string) => void;
   onRetake: (index: number) => void;
   onChangeFrame: () => void;
   onRestart: () => void;
 }
 
-/** Step 3: the finished frame — filters, retakes, download and share. */
+/** Step 3: the finished frame — retakes, download and share. */
 export function ResultStep({
   template,
   shots,
   mirror,
-  filterId,
-  onFilterChange,
   onRetake,
   onChangeFrame,
   onRestart,
@@ -76,20 +67,17 @@ export function ResultStep({
   const [busy, setBusy] = useState<"download" | "share" | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  const filterCss = filterCssFor(filterId);
   const canShare =
     typeof navigator !== "undefined" &&
     typeof navigator.share === "function" &&
     typeof navigator.canShare === "function";
 
-  // Recompose whenever frame, photos or filter change. Photos are never
-  // retaken for this — the filter is applied at compose time.
+  // Recompose whenever the frame or photos change (e.g. after a retake).
   useEffect(() => {
     let cancelled = false;
     composeBooth({
       template,
       photos: shots,
-      filterCss,
       mirror,
       scale: Math.min(1, PREVIEW_WIDTH / template.width),
     })
@@ -102,13 +90,12 @@ export function ResultStep({
     return () => {
       cancelled = true;
     };
-  }, [template, shots, filterCss, mirror]);
+  }, [template, shots, mirror]);
 
   async function renderBlob() {
     const canvas = await composeBooth({
       template,
       photos: shots,
-      filterCss,
       mirror,
       scale: EXPORT_SCALE,
     });
@@ -122,7 +109,7 @@ export function ResultStep({
     setMessage(null);
     try {
       downloadBlob(await renderBlob(), filename);
-      trackEvent("photobooth_download", { template: template.id, filter: filterId });
+      trackEvent("photobooth_download", { template: template.id });
     } catch {
       setMessage("Gagal menyimpan foto. Coba lagi.");
     } finally {
@@ -172,33 +159,9 @@ export function ResultStep({
         <div className="flex flex-col gap-1">
           <h2 className="text-h2 text-brand-foreground">Hasilmu sudah jadi!</h2>
           <p className="text-body text-brand-foreground/75">
-            Pilih filter, ulang foto yang kurang pas, lalu simpan.
+            Ulang foto yang kurang pas, lalu simpan.
           </p>
         </div>
-
-        <section className="flex flex-col gap-2" aria-label="Filter">
-          <h3 className="text-caption font-semibold tracking-wider text-brand-foreground/65 uppercase">
-            Filter
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {BOOTH_FILTERS.map((filter) => (
-              <button
-                key={filter.id}
-                type="button"
-                aria-pressed={filterId === filter.id}
-                onClick={() => onFilterChange(filter.id)}
-                className={cn(
-                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                  filterId === filter.id
-                    ? "bg-brand-cyan text-brand"
-                    : "bg-white/10 text-brand-foreground hover:bg-white/15",
-                )}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </section>
 
         <section className="flex flex-col gap-2" aria-label="Ulang foto">
           <h3 className="text-caption font-semibold tracking-wider text-brand-foreground/65 uppercase">
@@ -214,7 +177,7 @@ export function ResultStep({
                     aria-label={`Ulang foto ke-${index + 1}`}
                     className="group relative block size-16 overflow-hidden rounded-xl ring-1 ring-white/20 transition hover:ring-brand-cyan focus-visible:ring-2 focus-visible:ring-brand-cyan active:scale-95"
                   >
-                    <RetakeThumb bitmap={bitmap} mirror={mirror} filterCss={filterCss} />
+                    <RetakeThumb bitmap={bitmap} mirror={mirror} />
                     <span className="absolute inset-0 grid place-items-center bg-brand/60 opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                       <RotateCcw className="size-5 text-white" aria-hidden="true" />
                     </span>

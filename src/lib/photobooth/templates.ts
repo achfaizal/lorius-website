@@ -1,4 +1,6 @@
-import { drawContain, drawText, roundedRectPath } from "./draw";
+import { confetti, neon, sunset } from "./colorful-templates";
+import { drawContain, drawText, roundedRectPath, type SlotShape } from "./draw";
+import { daisy, garden, love, bubble, rainbow, sunburst } from "./shaped-templates";
 
 /**
  * Photobooth frame designs. Each frame is drawn in code (brand colors, the
@@ -8,6 +10,8 @@ import { drawContain, drawText, roundedRectPath } from "./draw";
  */
 
 export interface Slot {
+  /** Outline of the photo area; plain rounded rectangle when omitted. */
+  shape?: SlotShape;
   x: number;
   y: number;
   w: number;
@@ -34,6 +38,8 @@ export interface BoothTemplate {
   paper: string;
   /** name -> public path of images the design needs (loaded before drawing). */
   assets: Record<string, string>;
+  /** Painted over the paper, under the photos (gradients, confetti...). */
+  drawBackground?: (ctx: CanvasRenderingContext2D, env: DrawEnv) => void;
   drawForeground: (ctx: CanvasRenderingContext2D, env: DrawEnv) => void;
 }
 
@@ -178,4 +184,17 @@ const duo: BoothTemplate = {
   },
 };
 
-export const BOOTH_TEMPLATES: BoothTemplate[] = [strip, polaroid, duo];
+export const BOOTH_TEMPLATES: BoothTemplate[] = [
+  strip,
+  polaroid,
+  duo,
+  sunset,
+  confetti,
+  neon,
+  garden,
+  rainbow,
+  love,
+  bubble,
+  daisy,
+  sunburst,
+];

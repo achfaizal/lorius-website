@@ -1,13 +1,12 @@
-import { roundedRectPath } from "./draw";
+import { slotPath } from "./draw";
 import type { BoothTemplate, Slot } from "./templates";
 
 /**
- * Compositing engine. Raw camera frames are kept at sensor size; crop,
- * filter and text are computed here, at compose time — so the visitor can
- * change frame filter AFTER shooting without retaking, and rendering costs
- * nothing on a server (there is none).
+ * Compositing engine. Raw camera frames are kept at sensor size; crop and
+ * text are computed here, at compose time, and rendering costs nothing on a
+ * server (there is none).
  *
- * Paint order: paper → photos → frame foreground (borders, logo, text).
+ * Paint order: paper → frame background → photos → frame foreground (borders, logo, text).
  */
 
 export type PhotoSource = ImageBitmap | HTMLImageElement;
@@ -71,7 +70,6 @@ export interface ComposeInput {
   template: BoothTemplate;
   /** One per slot; null/undefined slots are drawn as empty placeholders. */
   photos: (PhotoSource | null | undefined)[];
-  filterCss: string;
   /** True for the front camera: photos are flipped so they match the preview. */
   mirror: boolean;
   /** 1 = the template's own pixel size. Use ~0.3–0.5 for previews. */
@@ -82,7 +80,6 @@ export interface ComposeInput {
 export async function composeBooth({
   template,
   photos,
-  filterCss,
   mirror,
   scale = 1,
   dateText = formatBoothDate(),
@@ -113,13 +110,16 @@ export async function composeBooth({
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
 
+  const env = { assets, family: canvasFontFamily(), dateText };
+
   ctx.fillStyle = template.paper;
   ctx.fillRect(0, 0, template.width, template.height);
+  template.drawBackground?.(ctx, env);
 
   template.slots.forEach((slot, index) => {
     const photo = photos[index];
     ctx.save();
-    roundedRectPath(ctx, slot.x, slot.y, slot.w, slot.h, template.slotRadius);
+    slotPath(ctx, slot, slot.shape, template.slotRadius);
     ctx.clip();
 
     if (!photo) {
@@ -128,9 +128,6 @@ export async function composeBooth({
     } else {
       const { w, h } = sizeOf(photo);
       const { sx, sy, sw, sh } = coverRect(w, h, slot);
-      // ctx.filter is missing in some older WebViews: the photo is still
-      // drawn, just without the filter — fail softly, not completely.
-      if (filterCss !== "none" && "filter" in ctx) ctx.filter = filterCss;
       if (mirror) {
         ctx.translate(slot.x + slot.w, slot.y);
         ctx.scale(-1, 1);
@@ -142,7 +139,7 @@ export async function composeBooth({
     ctx.restore();
   });
 
-  template.drawForeground(ctx, { assets, family: canvasFontFamily(), dateText });
+  template.drawForeground(ctx, env);
   return canvas;
 }
 

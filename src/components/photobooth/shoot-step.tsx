@@ -14,12 +14,20 @@ import {
   type Facing,
 } from "@/lib/photobooth/camera";
 import { coverRect } from "@/lib/photobooth/compose";
-import type { BoothTemplate } from "@/lib/photobooth/templates";
+import type { BoothTemplate, Slot } from "@/lib/photobooth/templates";
 import { cn } from "@/lib/utils";
 
 const COUNTDOWN_CHOICES = [3, 5, 10] as const;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+/** CSS corner radius that hints at the photo area's outline. */
+function guideRadius(shape: Slot["shape"], width: number): string {
+  if (shape === "ellipse" || shape === "scallop") return "50%";
+  if (shape === "arch") return `${width / 2}px ${width / 2}px 24px 24px`;
+  if (shape === "heart") return "38%";
+  return "16px";
+}
 
 /** Largest box with the given aspect ratio that fits inside `container`. */
 function useFittedBox(ratio: number) {
@@ -262,8 +270,8 @@ export function ShootStep({
         {ready && box.w > 0 ? (
           <div className="pointer-events-none absolute inset-0 grid place-items-center">
             <div
-              style={{ width: box.w, height: box.h }}
-              className="rounded-2xl border-2 border-white/85 shadow-[0_0_0_9999px_rgba(14,54,60,0.55)]"
+              style={{ width: box.w, height: box.h, borderRadius: guideRadius(guideSlot.shape, box.w) }}
+              className="border-2 border-white/85 shadow-[0_0_0_9999px_rgba(14,54,60,0.55)]"
             />
           </div>
         ) : null}

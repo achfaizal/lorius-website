@@ -7,7 +7,6 @@ import { X } from "lucide-react";
 import { LoriusMark } from "@/components/brand";
 import { trackEvent } from "@/lib/analytics";
 import type { Facing } from "@/lib/photobooth/camera";
-import { DEFAULT_FILTER_ID } from "@/lib/photobooth/filters";
 import type { BoothTemplate } from "@/lib/photobooth/templates";
 
 import { FrameStep } from "./frame-step";
@@ -29,7 +28,6 @@ export default function PhotoboothDialog({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState<Step>("frame");
   const [template, setTemplate] = useState<BoothTemplate | null>(null);
   const [shots, setShots] = useState<(ImageBitmap | null)[]>([]);
-  const [filterId, setFilterId] = useState(DEFAULT_FILTER_ID);
   const [facing, setFacing] = useState<Facing>("user");
   const [countdownFrom, setCountdownFrom] = useState(3);
   const [retakeIndex, setRetakeIndex] = useState<number | null>(null);
@@ -127,8 +125,6 @@ export default function PhotoboothDialog({ onClose }: { onClose: () => void }) {
                 template={template}
                 shots={shots}
                 mirror={mirror}
-                filterId={filterId}
-                onFilterChange={setFilterId}
                 onRetake={(index) => {
                   setRetakeIndex(index);
                   setStep("shoot");

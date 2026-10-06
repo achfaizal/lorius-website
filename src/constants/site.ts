@@ -19,7 +19,7 @@ export const SITE = {
   // placeholder domain) so metadata/sitemap/robots always have *some*
   // absolute URL to work with, even before that env var is set.
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://lorius.id",
-  whatsappNumber: "6289669685300",
+  whatsappNumber: "6281903570187",
   email: "loriusphotography@gmail.com",
   instagram: {
     handle: "@loriusphotography",
